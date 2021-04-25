@@ -71,9 +71,12 @@ void setup() {
     }
 
     showBootUpLogo();
+
 }
 
 void loop() {
+
+    
 
     // scanning button matrix
     for(int i = 0; i < 5; ++i) {
@@ -98,10 +101,7 @@ void loop() {
         digitalWrite(KEY_COLPINS[i], LOW);
     }
 
-    //BUG this freezes for some reason
-    //if(PRESSED_KEYS[0][0]) toggleMenu();
-
-    
+    if(PRESSED_KEYS[0][0]) toggleMenu();
     
 }
 
@@ -127,21 +127,23 @@ void showBootUpLogo() {
 }
 
 void drawMenu() {
+    display.clearDisplay();
     display.setTextSize(2);
-    display.setCursor(10,10);
+    display.setTextColor(WHITE);
+    display.setCursor(10,0);
     display.print("Menu");
     display.display();
 }
 
 void toggleMenu() {
-    if(CURRENTMODE != MODE_MENU) {
-        PREV_MODE = CURRENTMODE;
-        CURRENTMODE = MODE_MENU;
-        drawMenu();
-    } else {
+    if(CURRENTMODE == MODE_MENU) {
         CURRENTMODE = PREV_MODE;
         PREV_MODE = MODE_MENU;
         display.clearDisplay();
         display.display();
+    } else {
+        PREV_MODE = CURRENTMODE;
+        CURRENTMODE = MODE_MENU;
+        drawMenu();
     }
 }
