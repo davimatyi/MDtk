@@ -53,6 +53,7 @@ MODE PREV_MODE = MODE_MENU;
 
 
 void setup() {
+    
     pinMode(LED_ONBOARD, OUTPUT);
     digitalWrite(LED_ONBOARD, HIGH);
     Keyboard.begin();
@@ -80,19 +81,30 @@ void loop() {
 
     // scanning button matrix
     for(int i = 0; i < 5; ++i) {
+
         digitalWrite(KEY_COLPINS[i], HIGH);
+
         for(int j = 0; j < 5; ++j) {
+
             PRESSED_KEYS[j][i] = false;
+
             if(digitalRead(KEY_ROWPINS[j])) {
+
                 if(!PREV_KEYSTATE[j][i]) {
+
                     PREV_KEYSTATE[j][i] = true;
                     PRESSED_KEYS[j][i] = true;
+
                     if(CURRENTMODE == MODE_KEYBOARD && i > 0)
                         Keyboard.press(KEYS[j][i]);
                 }
+
             } else {
+
                 if(PREV_KEYSTATE[j][i]) {
+
                     PREV_KEYSTATE[j][i] = false;
+
                     if(CURRENTMODE == MODE_KEYBOARD && i > 0)
                         Keyboard.release(KEYS[j][i]);
                 }
@@ -106,6 +118,7 @@ void loop() {
 }
 
 void showBootUpLogo() {
+
     display.clearDisplay();
     display.drawBitmap(0, 0, bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
@@ -124,26 +137,34 @@ void showBootUpLogo() {
     delay(3000);
     display.clearDisplay();
     display.display();
+
 }
 
 void drawMenu() {
+
     display.clearDisplay();
     display.setTextSize(2);
     display.setTextColor(WHITE);
     display.setCursor(10,0);
     display.print("Menu");
     display.display();
+
 }
 
 void toggleMenu() {
+
     if(CURRENTMODE == MODE_MENU) {
+
         CURRENTMODE = PREV_MODE;
         PREV_MODE = MODE_MENU;
         display.clearDisplay();
         display.display();
+
     } else {
+
         PREV_MODE = CURRENTMODE;
         CURRENTMODE = MODE_MENU;
         drawMenu();
+
     }
 }
