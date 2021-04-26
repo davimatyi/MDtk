@@ -3,8 +3,8 @@
 #include <Adafruit_SSD1306.h>
 #include <Keyboard.h>
 
-#include "bitmaps.h"
-#include "DVDLogo.h"
+#include "src/gui/bitmaps.h"
+#include "src/gui/DVDLogo.h"
 
 #pragma region DEFINES
 
@@ -129,19 +129,19 @@ void loop() {
 void showBootUpLogo() {
 
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
     delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo2, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo2, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
     delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo3, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo3, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
     delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo4, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo4, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
     delay(750);
     display.clearDisplay();
