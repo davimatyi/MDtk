@@ -7,6 +7,10 @@ void DVDLogo::draw() {
     display.display();
 }
 
+int16_t sign(int16_t x) {
+    return (x > 0) - (x < 0);
+}
+
 void DVDLogo::render(u_long delta) {
     elapsedTime += delta;
     if(elapsedTime > frame_time) {
@@ -14,8 +18,8 @@ void DVDLogo::render(u_long delta) {
         currentY += velocityY;
         if(currentX + LOGO_WIDTH == screen_width) velocityX = -velocityX;
         if(currentY + LOGO_HEIGHT == screen_height) velocityY = -velocityY;
-        if(currentX == 0) velocityX = -velocityX;
-        if(currentY == 0) velocityY = -velocityY;
+        if(currentX == 0) velocityX = -sign(velocityX) * (rand() % 2 + 1);
+        if(currentY == 0) velocityY = -sign(velocityY) * (rand() % 2 + 1);
         draw();
         elapsedTime = 0;
     }

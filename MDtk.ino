@@ -56,7 +56,7 @@ MODE PREV_MODE = MODE_MENU;
 
 
 void setup() {
-    
+    srand((int) millis());
     pinMode(LED_ONBOARD, OUTPUT);
     digitalWrite(LED_ONBOARD, HIGH);
     Keyboard.begin();
