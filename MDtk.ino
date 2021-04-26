@@ -5,6 +5,7 @@
 
 #include "src/gui/bitmaps.h"
 #include "src/gui/DVDLogo.h"
+#include "src/gui/BootAnimation.h"
 
 #pragma region DEFINES
 
@@ -21,7 +22,7 @@ TwoWire Wire2(PB9, PB8);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire2, -1);
 
-DVDLogo dvdLogoRenderer(display);
+RenderObject* current_renderer;
 
 #pragma endregion
 
@@ -75,13 +76,23 @@ void setup() {
         digitalWrite(KEY_COLPINS[i], HIGH);
     }
 
-    showBootUpLogo();
+    current_renderer = new BootAnimationRenderer(display);
+
 }
 
-u_long prevTime = millis();
+u_long previous_time = millis();
 void loop() {
-    u_long currentTime = millis();
-    u_long elapsedTime = currentTime - prevTime;
+    u_long current_time = millis();
+    u_long delta_time = current_time - previous_time;
+
+    if(!current_renderer->finished()) 
+    {
+        current_renderer->render(delta_time);
+    } else 
+    {
+        delete current_renderer;
+        current_renderer = new DVDLogo(display);
+    }
 
     // scanning button matrix
     for(int i = 0; i < 5; ++i) {
@@ -118,35 +129,9 @@ void loop() {
     }
 
     if(PRESSED_KEYS[0][0]) toggleMenu();
+
     
-    if (CURRENTMODE == MODE_KEYBOARD) {
-        dvdLogoRenderer.render(elapsedTime);
-    }
-    
-    prevTime = currentTime;
-}
-
-void showBootUpLogo() {
-
-    display.clearDisplay();
-    display.drawBitmap(0, 0, bitmap_bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
-    display.display();
-    delay(250);
-    display.clearDisplay();
-    display.drawBitmap(0, 0, bitmap_bootLogo2, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
-    display.display();
-    delay(250);
-    display.clearDisplay();
-    display.drawBitmap(0, 0, bitmap_bootLogo3, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
-    display.display();
-    delay(250);
-    display.clearDisplay();
-    display.drawBitmap(0, 0, bitmap_bootLogo4, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
-    display.display();
-    delay(750);
-    display.clearDisplay();
-    display.display();
-
+    previous_time = current_time;
 }
 
 void drawMenu() {

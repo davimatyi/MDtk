@@ -11,7 +11,10 @@ class RenderObject
         RenderObject(Adafruit_SSD1306& display):
             display(display), elapsed_time(0), screen_width(display.width()), screen_height(display.height()) {}
         virtual void render(u_long delta);
+        virtual bool finished() const;
+    protected:
         virtual void draw();
+        
     protected:
         Adafruit_SSD1306& display;
         const float frame_time = 1.f / 60.f;
