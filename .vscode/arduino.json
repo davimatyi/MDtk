@@ -1,7 +1,7 @@
 {
     "board": "STMicroelectronics:stm32:GenF4",
     "configuration": "pnum=BLACKPILL_F411CE,upload_method=dfuMethod,xserial=generic,usb=HID,xusb=FS,opt=osstd,rtlib=nano",
-    "port": "COM4",
+    "port": "COM3",
     "programmer": "USBasp",
     "sketch": "MDtk.ino",
     "output": "./build"

@@ -1,10 +1,10 @@
 #include <Wire.h>
-#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <Keyboard.h>
 
-#include "bitmaps.h"
-
+#include "src/gui/bitmaps.h"
+#include "src/gui/DVDLogo.h"
 
 #pragma region DEFINES
 
@@ -20,6 +20,8 @@
 TwoWire Wire2(PB9, PB8);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire2, -1);
+
+DVDLogo dvdLogoRenderer(display);
 
 #pragma endregion
 
@@ -60,6 +62,8 @@ void setup() {
 
     Serial.begin(9600);
 
+    Serial.write("setup()");
+
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c)) {
         Serial.println("Display communication failed");
         for(;;);
@@ -72,12 +76,12 @@ void setup() {
     }
 
     showBootUpLogo();
-
 }
 
+u_long prevTime = millis();
 void loop() {
-
-    
+    u_long currentTime = millis();
+    u_long elapsedTime = currentTime - prevTime;
 
     // scanning button matrix
     for(int i = 0; i < 5; ++i) {
@@ -115,26 +119,31 @@ void loop() {
 
     if(PRESSED_KEYS[0][0]) toggleMenu();
     
+    if (CURRENTMODE == MODE_KEYBOARD) {
+        dvdLogoRenderer.render(elapsedTime);
+    }
+    
+    prevTime = currentTime;
 }
 
 void showBootUpLogo() {
 
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo1, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
-    delay(1000);
+    delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo2, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo2, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
-    delay(1000);
+    delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo3, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo3, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
-    delay(1000);
+    delay(250);
     display.clearDisplay();
-    display.drawBitmap(0, 0, bootLogo4, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
+    display.drawBitmap(0, 0, bitmap_bootLogo4, SCREEN_WIDTH, SCREEN_HEIGHT, WHITE);
     display.display();
-    delay(3000);
+    delay(750);
     display.clearDisplay();
     display.display();
 
@@ -146,7 +155,8 @@ void drawMenu() {
     display.setTextSize(2);
     display.setTextColor(WHITE);
     display.setCursor(10,0);
-    display.print("Menu");
+    display.print("Menu\n");
+    display.print("Nice");
     display.display();
 
 }
