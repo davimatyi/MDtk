@@ -1,8 +1,6 @@
 #ifndef DVDLogo_H
 #define DVDLogo_H
 
-
-
 #include "RenderObject.h"
 
 class DVDLogo : public RenderObject
