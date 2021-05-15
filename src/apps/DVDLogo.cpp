@@ -1,19 +1,23 @@
 #include "DVDLogo.h"
-#include "bitmaps.h"
+#include "../gui/bitmaps.h"
 
-void DVDLogo::draw() {
+void DVDLogo::draw() 
+{
     display.clearDisplay();
     display.drawBitmap(currentX, currentY, bitmap_dvdLogo, 32, 16, WHITE);
     display.display();
 }
 
-int16_t sign(int16_t x) {
+int16_t sign(int16_t x) 
+{
     return (x > 0) - (x < 0);
 }
 
-void DVDLogo::render(u_long delta) {
+void DVDLogo::tick(u_long delta) 
+{
     elapsedTime += delta;
-    if(elapsedTime > frame_time) {
+    if(elapsedTime > frame_time) 
+    {
         currentX += velocityX;
         currentY += velocityY;
         if(currentX + LOGO_WIDTH == screen_width) velocityX = -velocityX;

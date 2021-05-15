@@ -1,6 +1,6 @@
 #include "BootAnimation.h"
 
-void BootAnimationRenderer::render(u_long delta)
+void BootAnimation::tick(u_long delta)
 {
     elapsed_time += delta;
     if(finished()) return;
@@ -17,7 +17,7 @@ void BootAnimationRenderer::render(u_long delta)
     }
 }
 
-void BootAnimationRenderer::draw() 
+void BootAnimation::draw() 
 {
     display.clearDisplay();
     display.drawBitmap(0, 0, frames[current_frame], screen_width, screen_height, WHITE);

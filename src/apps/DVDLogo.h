@@ -1,14 +1,14 @@
 #ifndef DVDLogo_H
 #define DVDLogo_H
 
-#include "RenderObject.h"
+#include "Application.h"
 
-class DVDLogo : public RenderObject
+class DVDLogo : public Application
 {
     public:
         DVDLogo(Adafruit_SSD1306& display):
-            RenderObject(display), currentX(0), currentY(10), velocityX(1), velocityY(1) {}
-        void render(u_long delta) override;
+            Application(display), currentX(0), currentY(10), velocityX(1), velocityY(1) {}
+        void tick(u_long delta) override;
         bool finished() const override { return false; }
     protected:
         void draw() override;
