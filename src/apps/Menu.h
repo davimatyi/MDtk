@@ -39,6 +39,7 @@ class Menu : public Application
         int currentX;
         int destX;
         int selection;
+        const float frame_time = 1.f / 30.f;
     
 };
 

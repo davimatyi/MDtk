@@ -135,14 +135,14 @@ void loop()
     {
         menu_instance->tick(delta_time);
     }
-    else if(!current_app->finished()) 
+    else if(current_app != nullptr && !current_app->finished()) 
     {
         current_app->tick(delta_time);
     } 
     else 
     {
         delete current_app;
-        current_app = new DVDLogo(display);
+        //current_app = new DVDLogo(display);
     }
 
 

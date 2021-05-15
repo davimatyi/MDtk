@@ -32,7 +32,7 @@ void Menu::draw()
     for(int i = 0; i < MENUITEM_COUNT; ++i) 
     {
         uint16_t color = i == selection ? WHITE : BLACK;
-        display.drawBitmap(42 -currentX + i * 42, 20, menuItems[i].bitmap, 40, 40, color, 1 - color);
+        display.drawBitmap(44 - currentX + i * 42, 20, menuItems[i].bitmap, 40, 40, color, 1 - color);
     }
     display.display();
 }
