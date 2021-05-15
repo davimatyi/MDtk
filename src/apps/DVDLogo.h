@@ -15,7 +15,6 @@ class DVDLogo : public Application
     private:
         const int16_t LOGO_WIDTH = 32;
         const int16_t LOGO_HEIGHT = 16;
-        float elapsedTime;
         int16_t currentX;
         int16_t currentY;
         int16_t velocityX;

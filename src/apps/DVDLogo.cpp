@@ -15,8 +15,8 @@ int16_t sign(int16_t x)
 
 void DVDLogo::tick(u_long delta) 
 {
-    elapsedTime += delta;
-    if(elapsedTime > frame_time) 
+    elapsed_time += delta;
+    if(elapsed_time > frame_time) 
     {
         currentX += velocityX;
         currentY += velocityY;
@@ -25,6 +25,6 @@ void DVDLogo::tick(u_long delta)
         if(currentX == 0) velocityX = -sign(velocityX) * (rand() % 2 + 1);
         if(currentY == 0) velocityY = -sign(velocityY) * (rand() % 2 + 1);
         draw();
-        elapsedTime = 0;
+        elapsed_time = 0;
     }
 }

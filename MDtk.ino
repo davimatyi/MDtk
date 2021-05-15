@@ -3,9 +3,9 @@
 #include <Adafruit_SSD1306.h>
 #include <Keyboard.h>
 
+#include "src/apps/Menu.h"
 #include "src/apps/DVDLogo.h"
 #include "src/apps/BootAnimation.h"
-#include "src/apps/Menu.h"
 
 #pragma region DEFINES
 
@@ -37,7 +37,6 @@ const char KEYS[5][5] =
 
 bool PREV_KEYSTATE[5][5] = {false};
 bool PRESSED_KEYS[5][5] = {false};
-bool KEY_INPUT[5][5] = {false};
 
 const unsigned char KEY_ROWPINS[5] = 
 {
@@ -83,7 +82,7 @@ void setup()
     }
 
     current_app = new BootAnimation(display);
-    // menu_instance = new Menu(display);
+    menu_instance = new Menu(display, &PRESSED_KEYS);
 }
 
 
@@ -93,15 +92,7 @@ void loop()
     u_long current_time = millis();
     u_long delta_time = current_time - previous_time;
 
-    // if(!current_app->finished()) 
-    // {
-    //     current_app->render(delta_time);
-    // } 
-    // else 
-    // {
-    //     delete current_app;
-    //     current_app = new DVDLogo(display);
-    // }
+    
 
     // scanning button matrix
     for(int i = 0; i < 5; ++i) 
@@ -111,7 +102,6 @@ void loop()
         for(int j = 0; j < 5; ++j) 
         {
             PRESSED_KEYS[j][i] = false;
-            KEY_INPUT[j][i] = false;
 
             if(digitalRead(KEY_ROWPINS[j])) 
             {
@@ -121,11 +111,7 @@ void loop()
                     PRESSED_KEYS[j][i] = true;
 
                     if(CURRENTMODE == MODE_KEYBOARD && i > 0)
-                    {
                         Keyboard.press(KEYS[j][i]);
-                        KEY_INPUT[j][i] = true;
-
-                    }
                 }
 
             } 
@@ -136,9 +122,7 @@ void loop()
                     PREV_KEYSTATE[j][i] = false;
 
                     if(CURRENTMODE == MODE_KEYBOARD && i > 0)
-                    {
                         Keyboard.release(KEYS[j][i]);
-                    }
                 }
             }
         }
@@ -147,12 +131,21 @@ void loop()
 
     if(PRESSED_KEYS[0][0]) toggleMenu();
 
-    if(current_app != nullptr) 
+    if(CURRENTMODE == MODE_MENU) 
     {
-        // TODO tick app
+        menu_instance->tick(delta_time);
+    }
+    else if(!current_app->finished()) 
+    {
+        current_app->tick(delta_time);
+    } 
+    else 
+    {
+        delete current_app;
+        current_app = new DVDLogo(display);
     }
 
-    
+
     previous_time = current_time;
 }
 
@@ -180,6 +173,6 @@ void toggleMenu()
     {
         PREV_MODE = CURRENTMODE;
         CURRENTMODE = MODE_MENU;
-        drawMenu();
+        //drawMenu();
     }
 }
