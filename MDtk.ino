@@ -149,16 +149,6 @@ void loop()
     previous_time = current_time;
 }
 
-void drawMenu() 
-{
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setTextColor(WHITE);
-    display.setCursor(10,0);
-    display.print("Menu\n");
-    display.print("Nice");
-    display.display();
-}
 
 void toggleMenu() 
 {
