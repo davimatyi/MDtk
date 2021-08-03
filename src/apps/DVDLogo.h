@@ -9,7 +9,6 @@ class DVDLogo : public Application
         DVDLogo(Adafruit_SSD1306& display):
             Application(display), currentX(0), currentY(10), velocityX(1), velocityY(1) {}
         void tick(u_long delta) override;
-        bool finished() const override { return false; }
     protected:
         void draw() override;
     private:

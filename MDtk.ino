@@ -3,9 +3,11 @@
 #include <Adafruit_SSD1306.h>
 #include <Keyboard.h>
 
-#include "src/apps/Menu.h"
-#include "src/apps/DVDLogo.h"
+#include "src/apps/Application.h"
 #include "src/apps/BootAnimation.h"
+#include "src/apps/DVDLogo.h"
+#include "src/apps/Menu.h"
+#include "src/apps/Settings.h"
 
 #pragma region DEFINES
 
@@ -51,8 +53,9 @@ const unsigned char KEY_COLPINS[5] =
 MODE CURRENTMODE = MODE_KEYBOARD;
 MODE PREV_MODE = MODE_MENU;
 
-Application* current_app;
-Application* menu_instance;
+Application* app_instances[MENUITEM_COUNT];
+BootAnimation* boot_animation_instance;
+Menu* menu_instance;
 
 #pragma endregion
 
@@ -81,8 +84,16 @@ void setup()
         digitalWrite(KEY_COLPINS[i], HIGH);
     }
 
-    current_app = new BootAnimation(display);
+    boot_animation_instance = new BootAnimation(display);
     menu_instance = new Menu(display, &PRESSED_KEYS);
+
+
+    // TODO: instantiate these when they exist
+    app_instances[0] = nullptr; // keyboard
+    app_instances[1] = nullptr; // macropad
+    app_instances[2] = nullptr; // calculator
+    app_instances[3] = new Settings(display); // settings
+    app_instances[4] = nullptr; // doom
 }
 
 
@@ -129,20 +140,37 @@ void loop()
         digitalWrite(KEY_COLPINS[i], LOW);
     }
 
-    if(PRESSED_KEYS[0][0]) toggleMenu();
-
-    if(CURRENTMODE == MODE_MENU) 
+    // boot animation still going, disable menu and other apps
+    if(!boot_animation_instance->finished()) 
     {
-        menu_instance->tick(delta_time);
-    }
-    else if(current_app != nullptr && !current_app->finished()) 
-    {
-        current_app->tick(delta_time);
+        boot_animation_instance->tick(delta_time);
     } 
-    else 
+    else
     {
-        delete current_app;
-        //current_app = new DVDLogo(display);
+        // top left 'menu' key pressed
+        if(PRESSED_KEYS[0][0]) toggleMenu();
+
+        // if user is in menu, render it
+        if(CURRENTMODE == MODE_MENU) 
+        {
+            menu_instance->tick(delta_time);
+            // an app is selected
+            if(PRESSED_KEYS[2][2]) 
+            {
+                CURRENTMODE = menu_instance->current_mode();
+                PREV_MODE = MODE_MENU;
+                display.clearDisplay();
+                display.display();
+            }
+        }
+        // an app other than the menu will be rendered
+        else
+        {
+            if(app_instances[menu_instance->app_index] != nullptr)
+            {
+                app_instances[menu_instance->app_index]->tick(delta_time);
+            }
+        }
     }
 
 
@@ -163,6 +191,6 @@ void toggleMenu()
     {
         PREV_MODE = CURRENTMODE;
         CURRENTMODE = MODE_MENU;
-        //drawMenu();
+        menu_instance->resetSelection();
     }
 }

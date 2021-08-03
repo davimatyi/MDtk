@@ -10,7 +10,6 @@ class Application
         Application(Adafruit_SSD1306& display):
             display(display), elapsed_time(0), screen_width(display.width()), screen_height(display.height()) {}
         virtual void tick(u_long delta);
-        virtual bool finished() const;
     protected:
         virtual void draw();
         

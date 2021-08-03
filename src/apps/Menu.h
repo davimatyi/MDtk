@@ -20,9 +20,11 @@ class Menu : public Application
 {
     public:
         Menu(Adafruit_SSD1306& display, bool (*input)[5][5]):
-            Application(display), currentX(0), destX(0), selection(0), input_matrix(input) {}
+            Application(display), currentX(0), destX(0), selection(0), app_index(0), input_matrix(input) {}
         void tick(u_long delta);
-        bool finished() const override {return false;}
+        int app_index;
+        MODE current_mode() { return menuItems[app_index].mode; }
+        void resetSelection() { selection = app_index; }
     private:
         void draw();
 

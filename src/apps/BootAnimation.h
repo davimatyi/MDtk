@@ -10,7 +10,7 @@ class BootAnimation : public Application
         BootAnimation(Adafruit_SSD1306& display):
             Application(display), current_frame(-1) {}
         void tick(u_long delta);
-        bool finished() const override { return current_frame >= frame_count; }
+        bool finished() const { return current_frame >= frame_count; }
     protected:
         void draw();
     private:
