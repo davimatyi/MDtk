@@ -57,6 +57,8 @@ Application* app_instances[MENUITEM_COUNT];
 BootAnimation* boot_animation_instance;
 Menu* menu_instance;
 
+bool screenSaver = false;
+
 #pragma endregion
 
 
@@ -89,10 +91,10 @@ void setup()
 
 
     // TODO: instantiate these when they exist
-    app_instances[0] = nullptr; // keyboard
+    app_instances[0] = new DVDLogo(display, screenSaver); // keyboard
     app_instances[1] = nullptr; // macropad
     app_instances[2] = nullptr; // calculator
-    app_instances[3] = new Settings(display); // settings
+    app_instances[3] = new Settings(display, &PRESSED_KEYS, screenSaver); // settings
     app_instances[4] = nullptr; // doom
 }
 

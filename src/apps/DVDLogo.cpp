@@ -15,6 +15,7 @@ int16_t sign(int16_t x)
 
 void DVDLogo::tick(u_long delta) 
 {
+    if(!animate) return;
     elapsed_time += delta;
     if(elapsed_time > frame_time) 
     {

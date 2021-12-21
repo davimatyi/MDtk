@@ -4,9 +4,9 @@ void Menu::tick(u_long delta)
 {
     if((*input_matrix)[2][1]) --selection;
     if((*input_matrix)[2][3]) ++selection;
-    if((*input_matrix)[2][2]) app_index = selection;
     if(selection < 0) selection = 0;
     if(selection >= MENUITEM_COUNT) selection = 4;
+    if((*input_matrix)[2][2]) app_index = selection;
     destX = selection * 42;
     
     elapsed_time += delta;
@@ -15,6 +15,7 @@ void Menu::tick(u_long delta)
         // currentX +=  * ((destX - currentX > 0) - (destX - currentX < 0));
         currentX += abs(destX - currentX) > 2 ? (destX - currentX) / 2 : destX - currentX;
         draw();
+        elapsed_time = 0;
     }
 
 }

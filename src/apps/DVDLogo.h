@@ -6,8 +6,8 @@
 class DVDLogo : public Application
 {
     public:
-        DVDLogo(Adafruit_SSD1306& display):
-            Application(display), currentX(0), currentY(10), velocityX(1), velocityY(1) {}
+        DVDLogo(Adafruit_SSD1306& display, bool& screensaver):
+            Application(display), currentX(0), currentY(10), velocityX(1), velocityY(1), animate(screensaver) {}
         void tick(u_long delta) override;
     protected:
         void draw() override;
@@ -18,6 +18,7 @@ class DVDLogo : public Application
         int16_t currentY;
         int16_t velocityX;
         int16_t velocityY;
+        bool& animate;
 };
 
 
