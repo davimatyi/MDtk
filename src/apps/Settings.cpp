@@ -9,9 +9,11 @@ void Settings::tick(u_long delta)
     if((*input_matrix)[2][2]) 
     {
         // TODO enter submenu
-        if(settingsItems[selection].type == SET_CHECKBOX) 
-            settingsItems[selection].checked = ! settingsItems[selection].checked;
-        if(selection == 0) dvdlogo_enabled = settingsItems[0].checked;
+        if(settingsItems[selection].value)
+        {
+            if(settingsItems[selection].type == SET_CHECKBOX) 
+                *(settingsItems[selection].value) = ! *(settingsItems[selection].value);
+        }
     }
     destY = selection * 16;
     elapsed_time += delta;
@@ -34,12 +36,11 @@ void Settings::draw()
         uint16_t color = i != selection ? WHITE : BLACK;
         if(settingsItems[i].type == SET_CHECKBOX) 
         {
-            if(settingsItems[i].checked)
+            if(*settingsItems[i].value)
                 display.drawBitmap(0, 16 - currentY + i * 16, bitmap_checkbox_checked, 16, 16, color, 1 - color);
             else
                 display.drawBitmap(0, 16 - currentY + i * 16, bitmap_checkbox_unchecked, 16, 16, color, 1 - color);
-        }
-        else
+        } else
         {
             // TODO draw something for submenus
         }

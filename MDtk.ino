@@ -8,6 +8,7 @@
 #include "src/apps/DVDLogo.h"
 #include "src/apps/Menu.h"
 #include "src/apps/Settings.h"
+#include "src/apps/Calculator.h"
 
 #pragma region DEFINES
 
@@ -59,6 +60,8 @@ Menu* menu_instance;
 
 bool screenSaver = false;
 
+u_long previous_time = millis();
+
 #pragma endregion
 
 
@@ -90,16 +93,15 @@ void setup()
     menu_instance = new Menu(display, &PRESSED_KEYS);
 
 
-    // TODO: instantiate these when they exist
+    // TODO instantiate these when they exist
     app_instances[0] = new DVDLogo(display, screenSaver); // keyboard
     app_instances[1] = nullptr; // macropad
-    app_instances[2] = nullptr; // calculator
-    app_instances[3] = new Settings(display, &PRESSED_KEYS, screenSaver); // settings
+    app_instances[2] = new Calculator(display, &PRESSED_KEYS); // calculator
+    app_instances[3] = new Settings(display, &PRESSED_KEYS, &screenSaver); // settings
     app_instances[4] = nullptr; // doom
 }
 
 
-u_long previous_time = millis();
 void loop() 
 {
     u_long current_time = millis();
@@ -127,8 +129,7 @@ void loop()
                         Keyboard.press(KEYS[j][i]);
                 }
 
-            } 
-            else 
+            } else 
             {
                 if(PREV_KEYSTATE[j][i]) 
                 {
@@ -146,8 +147,7 @@ void loop()
     if(!boot_animation_instance->finished()) 
     {
         boot_animation_instance->tick(delta_time);
-    } 
-    else
+    } else
     {
         // top left 'menu' key pressed
         if(PRESSED_KEYS[0][0]) toggleMenu();
@@ -188,8 +188,7 @@ void toggleMenu()
         PREV_MODE = MODE_MENU;
         display.clearDisplay();
         display.display();
-    } 
-    else 
+    } else 
     {
         PREV_MODE = CURRENTMODE;
         CURRENTMODE = MODE_MENU;
